@@ -1,0 +1,41 @@
+/*
+固定一个数，寻找其他两个数，使得三个数的和为零。
+这样时间复杂度控制在O(n^2)以内。
+*/
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        
+    vector<vector<int>>ans;
+    sort(nums.begin(), nums.end());
+    map<vector<int>, int>mm;
+    for (int i = 0; i < nums.size(); i++) {
+
+        if (nums[i] > 0)break;
+        int j = i + 1, k = nums.size() - 1;
+        while (j < k) {
+            if (nums[j] + nums[k] + nums[i] == 0) {
+                vector<int>v;
+                v.push_back(nums[i]);
+                v.push_back(nums[j]);
+                v.push_back(nums[k]);
+                if (mm[v] == 0) {
+                    ans.push_back(v);
+                    mm[v] = 1;
+                }
+                while (j < k && nums[j] == nums[j+1]) {
+                    j = j + 1;
+                }
+                while (j < k && nums[k] == nums[k-1]) {
+                    k = k - 1;
+                }
+                j++; k--;
+            }
+            else if (nums[j] + nums[k] + nums[i] < 0)j++;
+            else k--;
+        }
+    }
+        return ans;
+    }
+};
