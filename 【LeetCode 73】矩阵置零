@@ -1,3 +1,8 @@
+/*
+原地算法就是只能使用使用额外O(1)的空间。
+本题使用第一行第一列作为存储标志。
+*/
+
 class Solution {
 public:
     void setZeroes(vector<vector<int>>& matrix) {
