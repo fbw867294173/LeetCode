@@ -1,0 +1,22 @@
+/*
+第一次只想到循环遍历的方法，但O(n)的复杂度一定超时；
+第二次使用C++的upper_bound函数，但有一个测试用例始终无法通过（仍待验证）；
+使用栈的方法仅需一次遍历。每当当前元素大于栈顶元素，就弹出一个元素，并计算它对应的解。
+*/
+
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& T) {
+        int n = T.size();
+	      vector<int>ans(n,0);
+	      stack<int>s;
+        for(int i=0;i<n;i++){
+            while(!s.empty()&&T[i]>T[s.top()]){
+                ans[s.top()]=i-s.top();
+                s.pop();
+            }
+            s.push(i);
+        }
+        return ans;
+	}
+};
