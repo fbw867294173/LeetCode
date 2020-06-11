@@ -1,0 +1,23 @@
+/*
+开始的想法是将任务均匀插入到桶内，然后统计总的时间。但实践操作困难。
+还是桶的想法，改为统计每个任务的个数。那么总的时间分为两种情况：
+  1 所有的间隔时间被排满，那么此时总时间等于总任务数（每个人物耗时一个时间单位）
+  2 未被排满，那么总的时间与出现次数最多的任务的出现次数有关。因为无论怎么安排，总要因这个任务产生间隔。
+  找到这个任务，其余的任务都可以被安排进间隔时间。
+  3 在2的情况下，要考虑任务数量并列最多的任务有多少个，作为最后一个桶的耗时。
+*/
+
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        int lent = tasks.size();
+        vector<int>v(26);
+        for(char i:tasks)
+            v[i-'A']++;
+        sort(v.begin(),v.end());
+        reverse(v.begin(),v.end());
+        int cnt = 1;
+        while(cnt<v.size() && v[cnt]==v[0])cnt++;
+        return max(lent, (v[0]-1)*(n+1)+cnt);
+    }
+};
