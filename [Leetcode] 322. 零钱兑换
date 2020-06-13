@@ -1,0 +1,34 @@
+/*
+有两种思路解决这个问题。
+*/
+
+/*
+深度优先搜索。通过不断加入某种面额的硬币来尝试能否凑出需要的解。
+但这种方法极容易超时（类似于暴力枚举）。本题中做了多处优化来降低运算时间：
+  1 常规剪枝
+  2 总是从面额最大的硬币开始枚举，且一次尽可能多的选取这种硬币（贪心的思想）。
+  3 枚举k时若已经不是最优解则停止。注意k可以等于0，此时不选这个面值硬币而跳入下一个面值。
+代码如下。那个排序的操作有点秀，学来的。rbegin()和rend()拍好就是倒序。
+*/
+class Solution {
+public:
+    void dfs(int idx,int amount, int cnt, vector<int>&coins, int &ans) {
+	
+	    if (0 == amount) {//优化1
+		    ans = min(cnt, ans);
+		    return;
+	    }
+	    if (idx == coins.size()) {//优化1
+		    return;
+	    }
+	    for (int k = amount / coins[idx]; k >= 0 && k+cnt<ans; k--) {//优化2  优化3
+		    dfs(idx + 1, amount - k * coins[idx], cnt+k, coins, ans);
+	    }
+  }
+    int coinChange(vector<int>& coins, int amount) {
+        const int inf = 99999999;int ans = inf;
+	      sort(coins.rbegin(), coins.rend());
+	      dfs(0, amount, 0, coins, ans);
+	      return ans==inf?-1:ans;
+    }
+};
