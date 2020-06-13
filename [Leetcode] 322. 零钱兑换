@@ -32,3 +32,26 @@ public:
 	      return ans==inf?-1:ans;
     }
 };
+
+/*
+动态规划。学来的方法，可以说是最简单的一类动态规划问题了，却理解了好久才懂。
+用dp[i]表示凑出总值为i的方案所需硬币的最少数量。那么dp[i] = min(dp[i-cj]+1,dp[i]).
+其中cj表示第j个硬币的面额。这个方法似乎只适用于0-1背包。还要学一下完全背包。
+自下而上的方法更容易理解一些。代码如下：
+*/
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        const int inf = 99999999;
+        vector<int>dp(amount + 1, inf);
+	    dp[0] = 0;
+	    for (int i = 1; i <= amount; i++) {
+		    for (int j = 0; j < coins.size(); j++) {
+			    if (coins[j] <= i)
+				    dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+		}
+	}
+    if(dp[amount]==inf)return -1;
+	else return dp[amount];
+    }
+};
