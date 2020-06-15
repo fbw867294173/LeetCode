@@ -1,0 +1,36 @@
+/*
+官方的解答是二分搜索，没有太理解他的思路，输入规模增大时应该用二分的方法。
+这道题的第一反应是暴力遍历，因为复杂度O(N)=10^5。如果算法的复杂度降到O(nlogn)是不会超时的。
+几个优化想法：
+  1 先排序，这样从小到大搜就可以进一步优化。
+  2 从target/n的平均值开始遍历到数组中最大值结束。当差值等于0时无需遍历后面的值。
+  3 计算转变后数组的和时用lower_bound找到第一个大于等于i的值。
+学到的方法：
+  提前计算部分数组和，将计算和的复杂度降到(1)。这个很有效。
+*/
+
+class Solution {
+public:
+    int findBestValue(vector<int>& arr, int target) {
+        int start = target / arr.size();
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        vector<int>prefix(n + 1);
+        for (int i = 1; i <= n; i++)
+            prefix[i] = arr[i - 1] + prefix[i - 1];
+        int ans = 0;
+        int minn = target;
+        int maxvalue = arr[n - 1];
+        for ( int i = start; i <= maxvalue; i++) {
+            auto it = lower_bound(arr.begin(), arr.end(), i);
+            int tmp = prefix[it - arr.begin()] + i * (arr.end() - it);
+            if (abs(tmp-target) < minn) {
+                minn = abs(tmp - target);
+                ans = i;
+            }
+            if(minn == 0)break;
+        }
+        
+        return ans;
+    }
+};
