@@ -1,0 +1,38 @@
+/*一刷
+想到了使用栈保存运算符。由于乘除法有优先级，所以在栈外计算，栈内存储加减法。
+数字另外使用一个栈存储。扫描一遍后不断Pop运算符栈，计算结果。
+一个难点在于扫描到的最后一个数字可能不会进栈。
+*/
+/*二刷
+学习了https://leetcode-cn.com/problems/basic-calculator-ii/solution/li-yong-zhan-jiang-si-ze-yun-suan-hua-jian-cheng-j/的方法。
+思路不变，但代码精简了许多。
+保存上一轮的运算符是一个巧妙地处理乘除法的方法。
+*/
+
+class Solution {
+public:
+    long calculate(string s) {
+        stack<long>numStack;
+        s += '#';
+        long num = 0;
+        char preop = '+';
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == ' ')continue;
+            if (s[i] >= '0'&&s[i] <= '9')
+                num = num * 10 + s[i]-'0';
+            else {
+                if (preop == '+')numStack.push(num);
+                else if (preop == '-')numStack.push(-num);
+                else if (preop == '*')numStack.top() *= num;
+                else numStack.top() /= num;
+                num = 0; preop = s[i];
+            }
+        }
+        long res = 0;
+        while (!numStack.empty()) {
+            res += numStack.top();
+            numStack.pop();
+        }
+        return res;
+    }
+};
