@@ -9,16 +9,16 @@
 
 class Solution {
 public:
-	int maxArea(vector<int>& height) {
-		int l = 0, r = height.size() - 1;
-		int ans = INT_MIN;
-		while (l < r) {
-			ans = max(ans, min(height[l], height[r])*(r - l));  //计算体积
-			if (height[r] > height[l])                         //尝试右移左柱子
-				l++;
-			else                                            //尝试左移右柱子
-				r--;
-		}
-		return ans;
+    int maxArea(vector<int>& height) {
+	int l = 0, r = height.size() - 1;
+	int ans = INT_MIN;
+	while (l < r) {
+	    ans = max(ans, min(height[l], height[r])*(r - l));  //计算体积
+	    if (height[r] > height[l])                         //尝试右移左柱子
+        	l++;
+	    else                                            //尝试左移右柱子
+		r--;
 	}
+	return ans;
+    }
 };
