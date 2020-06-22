@@ -1,0 +1,26 @@
+/*
+规律就是按Z字重排字符串，想得到做不到。
+自己尝试用char的二维数组保存遍历结果，但各种特殊情况需要特判，费时费力。
+其实排列后再组成字符串时没必要保持Z字型，相当于都靠左收缩了。
+所以用string数组代替二维数组也能完成，更方便。相比之下二维数组就是个智障。
+
+只要一上一下遍历就行了，flag表示遍历顺序。
+*/
+
+string convert(string s, int numRows) {
+        if (numRows == 1)return s;
+        vector<string>mm(min((int)s.size(), numRows));
+
+        int flag = -1;
+        int curRow = 0;
+        for (char ch : s) {
+            mm[curRow] += ch;
+            if (curRow == 0 || curRow == numRows - 1)
+                flag *= -1;
+            curRow += flag;
+        }
+        string res;
+        for (string str : mm)
+            res += str;
+        return res;
+    }
