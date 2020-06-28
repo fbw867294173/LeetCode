@@ -1,0 +1,42 @@
+/*
+第一次尝试超时，感觉复杂度要到O(n^2)了。先求出部分子数组和再遍历。
+用双指针的方法求部分子数组和只需一次遍历，O(n)复杂度，学到了新技能。
+*/
+
+int minSubArrayLen(int s, vector<int>& nums) {
+	/*此为超时代码
+	nums.insert(nums.begin(), 0);
+	int n = nums.size();
+	vector<int>left(n), right(n);
+	int inf = 0x7fffffff;
+	left[0] = 0;
+	int minlength = inf;
+	for (int i = 1; i < n; i++) {
+		left[i] = left[i - 1] + nums[i];
+		if (left[i] >= s) {
+			minlength = min(minlength, i);
+			for (int j = i - 1; j > 0; j--) {
+				if (left[i] - left[j] >= s)
+					minlength = min(minlength, i - j);
+			}
+		}
+	}
+
+	return minlength == inf?0:minlength;*/
+  //以下为双指针代码，也叫滑动窗口方法。
+	int n = nums.size();
+	int inf = 0x7fffffff;
+	int minlength = inf;
+	int i = 0, j = 0;
+	int sum = 0;
+	while (i < n) {
+		sum += nums[i];
+		while (sum >= s) {
+			minlength = min(minlength, i - j + 1);
+			sum -= nums[j];
+			j++;
+		}
+		i++;
+	}
+	return minlength == inf ? 0 : minlength;
+}
