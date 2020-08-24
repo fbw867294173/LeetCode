@@ -1,0 +1,100 @@
+/*
+160 相交链表
+编写一个程序，找到两个单链表相交的起始节点。
+
+如下面的两个链表：
+   4->1->8->4->5
+         ↑
+5->0->1->
+
+在节点 8 开始相交。
+*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+ /*
+ 原始的思路是双指针先统计两个链表的长度，让长的链表指针先移动长度的差值个单位，然后同时便利找到焦点。
+ 下面的方法相当于让长的链表的指针对短链表取余，重新赋值后两个链表指针位于相同的起点上。妙啊。
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        
+        ListNode *p=headA, *q=headB;
+        while(p!=q){
+            if(!p)p=headB;
+            else p=p->next;
+            if(!q)q=headA;
+            else  q=q->next;
+        }
+        return p;
+    }
+};
+
+/*
+141 环形链表
+为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
+
+示例 1：
+
+输入：head = [3,2,0,-4], pos = 1
+输出：true
+解释：链表中有一个环，其尾部连接到第二个节点。
+3->2->0->4-->
+   ↑         ↓
+   <---------
+*/
+/*
+常规的思路是可以用哈希表判断是否走过相同的节点。但这在链表中包含相同元素时不适用，且需要额外的空间。
+用快慢指针的方法。当存在环时快指针一定能追上慢指针。
+*/
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if(head == NULL || head->next == NULL)return false;
+        ListNode *p=head,*q=head;
+        while(q && q->next){
+            p=p->next;
+            q=q->next->next;
+            if(p==q)return true;
+        }
+        return false;
+    }
+};
+
+/*
+142 环形链表2
+要求和上题相同，问题是不仅要判断是否有环，还要定位入环的位置。
+*/
+/*
+在快慢指针相遇时，让新指针从头节点开始，慢指针从相遇位置开始，同时遍历。
+第一次相遇的位置就是入环的位置。
+原理:
+未完待续。
+*/
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(!head || !head->next)return NULL;
+        ListNode *p=head, *q = head;
+        ListNode *ans=head;
+        while(q && q->next){
+            p=p->next;
+            q=q->next->next;
+            if(p==q){
+                while(ans!=p){
+                    ans=ans->next;
+                    p=p->next;
+                }
+                return ans;
+            }
+        }
+        return NULL;
+    }
+};
